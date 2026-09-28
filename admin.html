@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Pantora Admin</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f2ed;
+      color: #171717;
+    }
+
+    header {
+      background: #111;
+      color: white;
+      padding: 22px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      font-family: Georgia, serif;
+      letter-spacing: 2px;
+    }
+
+    .admin-badge {
+      background: white;
+      color: #111;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: 230px 1fr;
+      gap: 25px;
+    }
+
+    .sidebar {
+      background: white;
+      border-radius: 18px;
+      padding: 20px;
+      height: fit-content;
+      box-shadow: 0 5px 25px rgba(0,0,0,.06);
+    }
+
+    .sidebar button {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      padding: 13px;
+      text-align: left;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+
+    .sidebar button:hover,
+    .sidebar button.active {
+      background: #111;
+      color: white;
+    }
+
+    .content {
+      background: white;
+      border-radius: 18px;
+      padding: 30px;
+      box-shadow: 0 5px 25px rgba(0,0,0,.06);
+    }
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    h2 {
+      font-family: Georgia, serif;
+      margin-bottom: 25px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 7px;
+      font-size: 14px;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    textarea {
+      min-height: 130px;
+      resize: vertical;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: #111;
+    }
+
+    .btn {
+      border: none;
+      padding: 12px 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .btn-dark {
+      background: #111;
+      color: white;
+    }
+
+    .btn-light {
+      background: #eee;
+      color: #111;
+    }
+
+    .btn-danger {
+      background: #d9534f;
+      color: white;
+    }
+
+    .posts {
+      display: grid;
+      gap: 12px;
+    }
+
+    .post-card {
+      border: 1px solid #eee;
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .post-info h3 {
+      font-family: Georgia, serif;
+      margin-bottom: 5px;
+    }
+
+    .post-info small {
+      color: #777;
+    }
+
+    .actions {
+      display: flex;
+      gap: 7px;
+      flex-wrap: wrap;
+    }
+
+    .preview {
+      margin-top: 30px;
+      border: 1px solid #eee;
+      border-radius: 15px;
+      overflow: hidden;
+    }
+
+    .preview img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+    }
+
+    .preview-content {
+      padding: 20px;
+    }
+
+    .preview-content h3 {
+      font-family: Georgia, serif;
+      font-size: 25px;
+      margin-bottom: 10px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+    }
+
+    .stat {
+      padding: 25px;
+      background: #f7f5f1;
+      border-radius: 15px;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 30px;
+      margin-top: 8px;
+    }
+
+    .notice {
+      padding: 15px;
+      background: #f7f5f1;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    @media(max-width: 800px) {
+      .dashboard {
+        grid-template-columns: 1fr;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .post-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>PANTORA</h1>
+  <span class="admin-badge">ADMIN PANEL</span>
+</header>
+
+<div class="container">
+
+  <div class="dashboard">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+      <button class="active" onclick="showSection('dashboard', this)">
+        📊 Dashboard
+      </button>
+
+      <button onclick="showSection('addPost', this)">
+        ✍️ Add New Post
+      </button>
+
+      <button onclick="showSection('manage', this)">
+        📝 Manage Posts
+      </button>
+
+      <button onclick="showSection('preview', this)">
+        👀 Preview
+      </button>
+
+      <button onclick="openBlog()">
+        🌐 Open Blog
+      </button>
+
+    </aside>
+
+
+    <!-- CONTENT -->
+    <main class="content">
+
+      <!-- DASHBOARD -->
+      <section id="dashboard" class="section active">
+
+        <h2>Pantora Dashboard</h2>
+
+        <div class="notice">
+          Welcome to your Pantora admin panel.
+          You can create and manage your fashion blog posts here.
+        </div>
+
+        <div class="stats">
+
+          <div class="stat">
+            Total Posts
+            <strong id="totalPosts">0</strong>
+          </div>
+
+          <div class="stat">
+            Categories
+            <strong id="totalCategories">0</strong>
+          </div>
+
+          <div class="stat">
+            Status
+            <strong>LIVE</strong>
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- ADD POST -->
+      <section id="addPost" class="section">
+
+        <h2 id="formTitle">Create New Post</h2>
+
+        <form id="postForm">
+
+          <div class="form-group">
+            <label>Post Title</label>
+            <input
+              type="text"
+              id="title"
+              placeholder="Example: Elegant Beige Coat Outfit"
+              required
+            >
+          </div>
+
+          <div class="form-group">
+            <label>Category</label>
+
+            <select id="category" required>
+              <option value="">Select Category</option>
+              <option>Women's Outfits</option>
+              <option>Handbags</option>
+              <option>Boots</option>
+              <option>Shoes</option>
+              <option>Fashion Trends</option>
+              <option>Accessories</option>
+            </select>
+
+          </div>
+
+          <div class="form-group">
+            <label>Image URL</label>
+
+            <input
+              type="url"
+              id="image"
+              placeholder="https://example.com/image.jpg"
+              required
+            >
+
+          </div>
+
+          <div class="form-group">
+            <label>Short Description</label>
+
+            <textarea
+              id="description"
+              placeholder="Write a short description..."
+              required
+            ></textarea>
+
+          </div>
+
+          <div class="form-group">
+            <label>Article Content</label>
+
+            <textarea
+              id="contentText"
+              placeholder="Write your complete fashion article..."
+              required
+            ></textarea>
+
+          </div>
+
+          <div class="form-group">
+            <label>Product / Affiliate Link</label>
+
+            <input
+              type="url"
+              id="productLink"
+              placeholder="https://..."
+            >
+
+          </div>
+
+          <button class="btn btn-dark" type="submit">
+            💾 Save Post
+          </button>
+
+          <button
+            class="btn btn-light"
+            type="button"
+            onclick="resetForm()"
+          >
+            Clear
+          </button>
+
+        </form>
+
+      </section>
+
+
+      <!-- MANAGE -->
+      <section id="manage" class="section">
+
+        <h2>Manage Posts</h2>
+
+        <div id="postsList" class="posts"></div>
+
+      </section>
+
+
+      <!-- PREVIEW -->
+      <section id="preview" class="section">
+
+        <h2>Live Preview</h2>
+
+        <div class="preview">
+
+          <img id="previewImage"
+               src="https://via.placeholder.com/900x500?text=Pantora">
+
+          <div class="preview-content">
+
+            <small id="previewCategory">
+              Fashion
+            </small>
+
+            <h3 id="previewTitle">
+              Your Post Title
+            </h3>
+
+            <p id="previewDescription">
+              Your post description will appear here.
+            </p>
+
+            <br>
+
+            <p id="previewContent">
+              Your article content will appear here.
+            </p>
+
+            <br>
+
+            <a
+              id="previewProduct"
+              href="#"
+              target="_blank"
+            >
+              View Product →
+            </a>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+</div>
+
+
+<script>
+
+const STORAGE_KEY = "pantora_posts";
+
+let posts = JSON.parse(
+  localStorage.getItem(STORAGE_KEY) || "[]"
+);
+
+let editingId = null;
+
+
+/* SECTION SWITCH */
+
+function showSection(id, button) {
+
+  document.querySelectorAll(".section")
+    .forEach(section => {
+      section.classList.remove("active");
+    });
+
+  document.getElementById(id)
+    .classList.add("active");
+
+  document.querySelectorAll(".sidebar button")
+    .forEach(btn => {
+      btn.classList.remove("active");
+    });
+
+  if(button) {
+    button.classList.add("active");
+  }
+
+  updateDashboard();
+  renderPosts();
+}
+
+
+/* SAVE */
+
+document.getElementById("postForm")
+.addEventListener("submit", function(e) {
+
+  e.preventDefault();
+
+  const post = {
+
+    id: editingId || Date.now(),
+
+    title:
+      document.getElementById("title").value,
+
+    category:
+      document.getElementById("category").value,
+
+    image:
+      document.getElementById("image").value,
+
+    description:
+      document.getElementById("description").value,
+
+    content:
+      document.getElementById("contentText").value,
+
+    productLink:
+      document.getElementById("productLink").value,
+
+    date:
+      new Date().toISOString()
+
+  };
+
+
+  if(editingId) {
+
+    posts = posts.map(p =>
+      p.id === editingId ? post : p
+    );
+
+    alert("Post updated successfully!");
+
+  } else {
+
+    posts.push(post);
+
+    alert("New post saved!");
+
+  }
+
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(posts)
+  );
+
+
+  resetForm();
+
+  updateDashboard();
+
+  renderPosts();
+
+  showSection("manage");
+
+});
+
+
+/* RESET */
+
+function resetForm() {
+
+  document.getElementById("postForm").reset();
+
+  editingId = null;
+
+  document.getElementById("formTitle")
+    .textContent = "Create New Post";
+
+}
+
+
+/* RENDER POSTS */
+
+function renderPosts() {
+
+  const list =
+    document.getElementById("postsList");
+
+  if(!list) return;
+
+
+  if(posts.length === 0) {
+
+    list.innerHTML = `
+      <div class="notice">
+        No posts yet. Create your first Pantora post.
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  list.innerHTML = posts.map(post => `
+
+    <div class="post-card">
+
+      <div class="post-info">
+
+        <h3>${escapeHTML(post.title)}</h3>
+
+        <small>
+          ${escapeHTML(post.category)}
+        </small>
+
+      </div>
+
+      <div class="actions">
+
+        <button
+          class="btn btn-light"
+          onclick="editPost(${post.id})"
+        >
+          Edit
+        </button>
+
+        <button
+          class="btn btn-danger"
+          onclick="deletePost(${post.id})"
+        >
+          Delete
+        </button>
+
+      </div>
+
+    </div>
+
+  `).join("");
+
+}
+
+
+/* EDIT */
+
+function editPost(id) {
+
+  const post =
+    posts.find(p => p.id === id);
+
+  if(!post) return;
+
+
+  editingId = id;
+
+
+  document.getElementById("title").value =
+    post.title;
+
+  document.getElementById("category").value =
+    post.category;
+
+  document.getElementById("image").value =
+    post.image;
+
+  document.getElementById("description").value =
+    post.description;
+
+  document.getElementById("contentText").value =
+    post.content;
+
+  document.getElementById("productLink").value =
+    post.productLink || "";
+
+
+  document.getElementById("formTitle")
+    .textContent = "Edit Post";
+
+
+  showSection("addPost");
+
+}
+
+
+/* DELETE */
+
+function deletePost(id) {
+
+  if(!confirm("Delete this post?")) {
+    return;
+  }
+
+
+  posts =
+    posts.filter(post => post.id !== id);
+
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(posts)
+  );
+
+
+  renderPosts();
+
+  updateDashboard();
+
+}
+
+
+/* DASHBOARD */
+
+function updateDashboard() {
+
+  document.getElementById("totalPosts")
+    .textContent = posts.length;
+
+
+  const categories =
+    new Set(posts.map(p => p.category));
+
+
+  document.getElementById("totalCategories")
+    .textContent = categories.size;
+
+}
+
+
+/* PREVIEW */
+
+function updatePreview() {
+
+  document.getElementById("previewTitle")
+    .textContent =
+    document.getElementById("title").value ||
+    "Your Post Title";
+
+
+  document.getElementById("previewCategory")
+    .textContent =
+    document.getElementById("category").value ||
+    "Fashion";
+
+
+  document.getElementById("previewDescription")
+    .textContent =
+    document.getElementById("description").value ||
+    "Your post description will appear here.";
+
+
+  document.getElementById("previewContent")
+    .textContent =
+    document.getElementById("contentText").value ||
+    "Your article content will appear here.";
+
+
+  document.getElementById("previewImage").src =
+    document.getElementById("image").value ||
+    "https://via.placeholder.com/900x500?text=Pantora";
+
+
+  document.getElementById("previewProduct").href =
+    document.getElementById("productLink").value ||
+    "#";
+
+}
+
+
+/* INPUT LISTENERS */
+
+[
+  "title",
+  "category",
+  "image",
+  "description",
+  "contentText",
+  "productLink"
+].forEach(id => {
+
+  document.getElementById(id)
+    .addEventListener("input", updatePreview);
+
+});
+
+
+/* OPEN BLOG */
+
+function openBlog() {
+
+  window.open(
+    "https://strenger144.github.io/pantora-blog/",
+    "_blank"
+  );
+
+}
+
+
+/* SECURITY */
+
+function escapeHTML(text) {
+
+  const div = document.createElement("div");
+
+  div.textContent = text;
+
+  return div.innerHTML;
+
+}
+
+
+/* START */
+
+updateDashboard();
+renderPosts();
+updatePreview();
+
+</script>
+
+</body>
+</html>
