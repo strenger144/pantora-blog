@@ -1,71 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <rss version="2.0">
-
 <channel>
 
 <title>Pantora Fashion</title>
-
-<link>https://YOUR-DOMAIN.com/</link>
-
-<description>
-Women's fashion, outfit ideas, handbags, shoes and boots.
-</description>
-
+<link>https://strenger144.github.io/pantora-blog/</link>
+<description>Women's fashion, outfit ideas, handbags, shoes and boots.</description>
 <language>en-us</language>
 
-
 <item>
-
-<title>
-The Elegant Beige Coat Outfit You'll Want This Season
-</title>
-
-<link>
-https://YOUR-DOMAIN.com/post.html?id=beige-coat
-</link>
-
-<description>
-A timeless neutral outfit for effortless winter style.
-</description>
-
+<title>The Elegant Beige Coat Outfit You'll Want This Season</title>
+<link>https://strenger144.github.io/pantora-blog/post.html?id=beige-coat</link>
+<description>A timeless neutral outfit for effortless winter style.</description>
 </item>
 
-
 <item>
-
-<title>
-The Black Shoulder Bag That Goes With Everything
-</title>
-
-<link>
-https://YOUR-DOMAIN.com/post.html?id=black-bag
-</link>
-
-<description>
-One timeless accessory for everyday outfits.
-</description>
-
+<title>The Black Shoulder Bag That Goes With Everything</title>
+<link>https://strenger144.github.io/pantora-blog/post.html?id=black-bag</link>
+<description>One timeless accessory for everyday outfits.</description>
 </item>
 
-
 <item>
-
-<title>
-How to Style Black Combat Boots
-</title>
-
-<link>
-https://YOUR-DOMAIN.com/post.html?id=combat-boots
-</link>
-
-<description>
-Easy ways to create modern everyday outfits.
-</description>
-
+<title>How to Style Black Combat Boots</title>
+<link>https://strenger144.github.io/pantora-blog/post.html?id=combat-boots</link>
+<description>Easy ways to create modern everyday outfits.</description>
 </item>
-
 
 </channel>
-
 </rss>
